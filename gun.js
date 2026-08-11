@@ -67,7 +67,7 @@ const createDeck = () => {
         minZoom: 3,
         maxZoom: 18,
         bearing: 0,
-        pitch: 0,
+        pitch: 10,
       },
       controller: true,
 
