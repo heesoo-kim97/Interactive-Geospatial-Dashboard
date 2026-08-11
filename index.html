@@ -19,8 +19,13 @@
             Gun Violence In United States
         </div>
         <div class="container2 gray">
-            <div>Select Date Range</div>
-            <input title="dateRange" type="text" name="daterange" value="01/01/2013 - 12/31/2018" />
+            <div class="control-title">Select Date Range</div>
+            <input
+                title="dateRange"
+                type="text"
+                name="daterange"
+                value="01/01/2013 - 12/31/2018"
+            />
         </div>
         <div class="container3 gray">
             <div id="map-container">
@@ -28,12 +33,32 @@
             </div>
         </div>
         <div class="container4 gray">
-            <div class="total-case">Total Case:</div>
-            <div class="total-case-num">124,207</div>
+            <div class="metric-title">Total Incidents</div>
+            <div id="total-incidents" class="metric-value">0</div>
         </div>
-        <div class="container5 gray"></div>
-        <div class="container6 gray"></div>
-        <div class="container7 gray"></div>
+        <div class="container5 gray">
+            <div class=""metric-title">Total Killed</div>
+            <div id=""total-killed" class="metric-value">0</div>
+        </div>
+        <div class="container6 gray">
+            <div class="metric-title">Total Injured</div>
+            <div id="total-injured" class="metric-value">0</div>
+        </div>
+        <div class="container7 gray">
+            <div class="metric-title">Visualization</div>
+            <label>
+                <input type="radio" name="layer" value="scatter" checked>
+                Incidents
+            </label>
+            <label>
+                <input type="radio" name="layer" value="heat">
+                Density
+            </label>
+            <label>
+                <input type="radio" name="layer" value="heat">
+                3D Density
+            </label>
+        </div>
     </div>
     <script src="./gun.js"></script>
 </body>
