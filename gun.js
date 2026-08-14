@@ -25,11 +25,13 @@ const tooltip = document.getElementById("tooltip");
     .then(data => {
       gunData = data;
       filteredData = data;
+
       createScatterplot();
       createHeatMap();
       createHexagon();
       createDeck();
       updateDashboard();
+      updateLayer();
     })
     .catch(error => {
       console.log('Error:', error)
@@ -67,6 +69,7 @@ const createDeck = () => {
 
       mapStyle: 'mapbox://styles/mapbox/dark-v10',
 
+      useDeVicePixels: 1,
 
       initialViewState: {
         latitude: 39.7392,
@@ -75,7 +78,7 @@ const createDeck = () => {
         minZoom: 3,
         maxZoom: 18,
         bearing: 0,
-        pitch: 10,
+        pitch: 40,
       },
       controller: true,
 
@@ -104,10 +107,10 @@ const createDeck = () => {
       scatterplotLayer = new deck.ScatterplotLayer({
       id: 'scatter',
       data: filteredData,
-      opacity: 0.8,
+      opacity: 0.6,
       filled: true,
-      radiusMinPixels: 3,
-      radiusMaxPixels: 6,
+      radiusMinPixels: 2,
+      radiusMaxPixels: 4,
       getPosition: d => [d.longitude, d.latitude],
       getFillColor: d => d.n_killed > 0 ? [200, 0, 40, 150] : [255, 140, 0, 100],
       pickable: true
@@ -125,49 +128,111 @@ const createDeck = () => {
   }
 
   const createHexagon = () => {
-    hexagonLayer = new deck.HexagonLayer({
+    hexagonLayer = new deck.ColumnLayer({
       id: 'hex',
       data: filteredData,
       getPosition: d => [d.longitude, d.latitude],
-      getElevationWeight: d => (d.n_killed * 100) + d.n_injured,
-      elevationScale: 100,
+      getElevation: d =>
+        (Number(d.n_killed || 0) * 1000) +
+        (Number(d.n_injured || 0) * 100),
+      radius: 50,
+      diskResolution: 16,
+      elevationScale: 1000,
       extruded: true,
-      opacity: 0.3
+      getFillColor: d => Number(d.n_killed || 0) > 0 ? [200, 0, 40, 180] : [255, 140, 0, 150],
+      getLineColor: [255, 255, 255],
+      pickable: true
     })
   }
 
   const updateDashboard = () => {
-    const totalIncidents = filteredData.length;
 
-    const totalKilled = filteredData.reduce(
-      (sum, d) => sum + Number(d.n_killed || 0), 0);
+  const totalIncidents = filteredData.length;
 
-    const totalInjured = filteredData.reduce(
-      (sum, d) => sum + Number(d.n_injured || 0), 0);
+  const totalKilled = filteredData.reduce((sum, d) => {
+    return sum + Number(d.n_killed || 0);
+  }, 0);
 
-    document.getElementById('total-incidents').textContent = totalIncidents.toLocaleString();
-    document.getElementById('total-killed').textContent = totalKilled.toLocaleString();
-    document.getElementById('total-injured').textContent = totalInjured.toLocaleString();
-  }
+  const totalInjured = filteredData.reduce((sum, d) => {
+    return sum + Number(d.n_injured || 0);
+  }, 0);
+
+  console.log("Dashboard:", {
+    incidents: totalIncidents,
+    killed: totalKilled,
+    injured: totalInjured
+  });
+
+  document.getElementById("total-incidents").textContent =
+    totalIncidents.toLocaleString();
+
+  document.getElementById("total-killed").textContent =
+    totalKilled.toLocaleString();
+
+  document.getElementById("total-injured").textContent =
+    totalInjured.toLocaleString();
+}
 
   const updateLayer = () => {
-    let activeLayer;
 
     if (currentLayer === "scatter") {
-      activeLayer = scatterplotLayer;
+      
+      scatterplotLayer = new deck.ScatterplotLayer({
+        id: 'scatter',
+        data: filteredData,
+        opacity: 0.8,
+        filled: true,
+        radiusMinPixels: 3,
+        radiusMaxPixels: 6,
+        getPosition: d => [d.longitude, d.latitude],
+        getFillColor: d => d.n_killed > 0 ? [200, 0, 40, 150] : [255, 140, 0, 100],
+        pickable: true
+      });
+
+      deckgl.setProps({ layers: [scatterplotLayer] });
     }
 
     if (currentLayer === "heat") {
-      activeLayer = heatmapLayer;
+      
+      heatmapLayer = new deck.HeatmapLayer({
+        id: 'heat',
+        data: filteredData,
+        getPosition: d => [d.longitude, d.latitude],
+        getWeight: d => Number(d.n_killed || 0) + Number(d.n_injured || 0) * 0.5,
+        radiusPixels: 60
+      });
+
+      deckgl.setProps({ layers: [heatmapLayer] });
     }
 
     if (currentLayer === "hex") {
-      activeLayer = hexagonLayer;
-    }
 
-    deckgl.setProps({ layers: [activeLayer] });
+      hexagonLayer = new deck.ColumnLayer({
+        id: 'hex',
+        data: filteredData,
+        getPosition: d => [d.longitude, d.latitude],
+        getElevationWeight: d => (Number(d.n_killed || 0) * 100) + Number(d.n_injured || 0),
+        radius: 3000,
+        diskResolution: 32,
+        elevationScale: 1,
+        extruded: true,
+        getFillColor: d => Number(d.n_killed || 0) > 0 ? [200, 0, 40, 180] : [255, 140, 0, 150],
+        getLineColor: [255, 255, 255],
+        pickable: true
+      });
+      
+      deckgl.setProps({ layers: [hexagonLayer] });
+    }
   }
   
+  document.querySelectorAll('input[name="layer"]').forEach((input) => {
+
+    input.addEventListener('change', (event) => {
+      currentLayer = event.target.value;
+      updateLayer();
+    });
+  })
+
   /*
   onHover: ({object, x, y}) => {
         if(object) {
