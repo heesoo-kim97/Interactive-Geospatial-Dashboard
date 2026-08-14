@@ -81,7 +81,7 @@ const createDeck = () => {
 
       /* Possible Layers: ScatterplotLayer, ArcLayer, LineLayer, PolygonLayer, GeoJsonLayer, IconLayer, TextLayer, HexagonLayer
       HeatmapLayer, 3D Layer, TripsLayer, Custom Layer*/ //
-      layers: [scatterplotLayer, heatmapLayer, hexagonLayer],
+      layers: [scatterplotLayer],
       getTooltip: ({object}) => object && {
         html: `<div>Occurred on: ${object.date}</div>
         <div>Death: ${object.n_killed} Injuried: ${object.n_injured}</div>
@@ -136,6 +136,38 @@ const createDeck = () => {
     })
   }
 
+  const updateDashboard = () => {
+    const totalIncidents = filteredData.length;
+
+    const totalKilled = filteredData.reduce(
+      (sum, d) => sum + Number(d.n_killed || 0), 0);
+
+    const totalInjured = filteredData.reduce(
+      (sum, d) => sum + Number(d.n_injured || 0), 0);
+
+    document.getElementById('total-incidents').textContent = totalIncidents.toLocaleString();
+    document.getElementById('total-killed').textContent = totalKilled.toLocaleString();
+    document.getElementById('total-injured').textContent = totalInjured.toLocaleString();
+  }
+
+  const updateLayer = () => {
+    let activeLayer;
+
+    if (currentLayer === "scatter") {
+      activeLayer = scatterplotLayer;
+    }
+
+    if (currentLayer === "heat") {
+      activeLayer = heatmapLayer;
+    }
+
+    if (currentLayer === "hex") {
+      activeLayer = hexagonLayer;
+    }
+
+    deckgl.setProps({ layers: [activeLayer] });
+  }
+  
   /*
   onHover: ({object, x, y}) => {
         if(object) {
