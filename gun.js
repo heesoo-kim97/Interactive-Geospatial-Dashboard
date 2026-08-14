@@ -3,6 +3,12 @@ let heatmapLayer;
 let hexagonLayer;
 let deckgl;
 
+let gunData = [];
+let filteredData = [];
+
+let currentLayer = "scatter";
+
+
 const map = document.getElementById("map-container");
 const tooltip = document.getElementById("tooltip");
 
@@ -18,10 +24,12 @@ const tooltip = document.getElementById("tooltip");
     .then(res => res.json())
     .then(data => {
       gunData = data;
+      filteredData = data;
       createScatterplot();
       createHeatMap();
       createHexagon();
       createDeck();
+      updateDashboard();
     })
     .catch(error => {
       console.log('Error:', error)
@@ -95,7 +103,7 @@ const createDeck = () => {
     const createScatterplot = () => {
       scatterplotLayer = new deck.ScatterplotLayer({
       id: 'scatter',
-      data: gunData,
+      data: filteredData,
       opacity: 0.8,
       filled: true,
       radiusMinPixels: 3,
@@ -109,7 +117,7 @@ const createDeck = () => {
   const createHeatMap = () => {
     heatmapLayer = new deck.HeatmapLayer({
       id: 'heat',
-      data: gunData,
+      data: filteredData,
       getPosition: d => [d.longitude, d.latitude],
       getWeight: d => d.n_killed + (d.n_injured * 0.5),
       radiusPixels: 60
@@ -119,7 +127,7 @@ const createDeck = () => {
   const createHexagon = () => {
     hexagonLayer = new deck.HexagonLayer({
       id: 'hex',
-      data: gunData,
+      data: filteredData,
       getPosition: d => [d.longitude, d.latitude],
       getElevationWeight: d => (d.n_killed * 100) + d.n_injured,
       elevationScale: 100,
