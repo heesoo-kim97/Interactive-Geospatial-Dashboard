@@ -1,6 +1,3 @@
-let scatterplotLayer;
-let heatmapLayer;
-let hexagonLayer;
 let deckgl;
 
 let gunData = [];
@@ -26,9 +23,6 @@ const tooltip = document.getElementById("tooltip");
       gunData = data;
       filteredData = data;
 
-      createScatterplot();
-      createHeatMap();
-      createHexagon();
       createDeck();
       updateDashboard();
       updateLayer();
@@ -69,7 +63,7 @@ const createDeck = () => {
 
       mapStyle: 'mapbox://styles/mapbox/dark-v10',
 
-      useDeVicePixels: 1,
+      useDevicePixels: 1,
 
       initialViewState: {
         latitude: 39.7392,
@@ -84,7 +78,7 @@ const createDeck = () => {
 
       /* Possible Layers: ScatterplotLayer, ArcLayer, LineLayer, PolygonLayer, GeoJsonLayer, IconLayer, TextLayer, HexagonLayer
       HeatmapLayer, 3D Layer, TripsLayer, Custom Layer*/ //
-      layers: [scatterplotLayer],
+      layers: [],
       getTooltip: ({object}) => object && {
         html: `<div>Occurred on: ${object.date}</div>
         <div>Death: ${object.n_killed} Injuried: ${object.n_injured}</div>
@@ -98,13 +92,11 @@ const createDeck = () => {
         }
       }
     });
-
-    const newLayer = deckgl.props.layers;
     }
 
 
     const createScatterplot = () => {
-      scatterplotLayer = new deck.ScatterplotLayer({
+      return new deck.ScatterplotLayer({
       id: 'scatter',
       data: filteredData,
       opacity: 0.6,
@@ -118,7 +110,7 @@ const createDeck = () => {
   }
 
   const createHeatMap = () => {
-    heatmapLayer = new deck.HeatmapLayer({
+    return new deck.HeatmapLayer({
       id: 'heat',
       data: filteredData,
       getPosition: d => [d.longitude, d.latitude],
@@ -128,21 +120,42 @@ const createDeck = () => {
   }
 
   const createHexagon = () => {
-    hexagonLayer = new deck.ColumnLayer({
+    return new deck.HexagonLayer({
       id: 'hex',
       data: filteredData,
-      getPosition: d => [d.longitude, d.latitude],
-      getElevation: d =>
-        (Number(d.n_killed || 0) * 1000) +
-        (Number(d.n_injured || 0) * 100),
-      radius: 50,
-      diskResolution: 16,
-      elevationScale: 1000,
+
+      gpuAggregation: false,
+
+      getPosition: d => [
+        Number(d.longitude), Number(d.latitude)],
+      
+      // Height = number/severity of incidents in each hexagon  
+      getElevationWeight: d =>
+      1 +
+      Number(d.n_killed || 0) * 5 +
+      Number(d.n_injured || 0) * 0.25,
+
+    // Color of each hexagon
+    getColorWeight: d =>
+      1 +
+      Number(d.n_killed || 0) * 5 +
+      Number(d.n_injured || 0) * 0.25,
+
+
+      radius: 1000,
+      elevationScale: 100,
       extruded: true,
-      getFillColor: d => Number(d.n_killed || 0) > 0 ? [200, 0, 40, 180] : [255, 140, 0, 150],
-      getLineColor: [255, 255, 255],
-      pickable: true
-    })
+      coverage: 0.85,
+      opacity: 0.7,
+      pickable: false,
+      colorRange: [
+          [255, 245, 200],
+          [255, 200, 100],
+          [255, 140, 50],
+          [230, 60, 30],
+          [180, 0, 30]
+        ]
+    });
   }
 
   const updateDashboard = () => {
@@ -175,60 +188,31 @@ const createDeck = () => {
 
   const updateLayer = () => {
 
-    if (currentLayer === "scatter") {
+      let activeLayer;
+
+      if (currentLayer === "scatter") {
+        activeLayer = createScatterplot();
+      } else if (currentLayer === "heat") {
+        activeLayer = createHeatMap();
+        } else if (currentLayer === "hex") {
+        activeLayer = createHexagon();
+        }
+
+        console.log("Switching layer:", currentLayer, activeLayer);
       
-      scatterplotLayer = new deck.ScatterplotLayer({
-        id: 'scatter',
-        data: filteredData,
-        opacity: 0.8,
-        filled: true,
-        radiusMinPixels: 3,
-        radiusMaxPixels: 6,
-        getPosition: d => [d.longitude, d.latitude],
-        getFillColor: d => d.n_killed > 0 ? [200, 0, 40, 150] : [255, 140, 0, 100],
-        pickable: true
+      deckgl.setProps({
+        layers: [activeLayer]
       });
-
-      deckgl.setProps({ layers: [scatterplotLayer] });
     }
-
-    if (currentLayer === "heat") {
-      
-      heatmapLayer = new deck.HeatmapLayer({
-        id: 'heat',
-        data: filteredData,
-        getPosition: d => [d.longitude, d.latitude],
-        getWeight: d => Number(d.n_killed || 0) + Number(d.n_injured || 0) * 0.5,
-        radiusPixels: 60
-      });
-
-      deckgl.setProps({ layers: [heatmapLayer] });
-    }
-
-    if (currentLayer === "hex") {
-
-      hexagonLayer = new deck.ColumnLayer({
-        id: 'hex',
-        data: filteredData,
-        getPosition: d => [d.longitude, d.latitude],
-        getElevationWeight: d => (Number(d.n_killed || 0) * 100) + Number(d.n_injured || 0),
-        radius: 3000,
-        diskResolution: 32,
-        elevationScale: 1,
-        extruded: true,
-        getFillColor: d => Number(d.n_killed || 0) > 0 ? [200, 0, 40, 180] : [255, 140, 0, 150],
-        getLineColor: [255, 255, 255],
-        pickable: true
-      });
-      
-      deckgl.setProps({ layers: [hexagonLayer] });
-    }
-  }
+    
   
   document.querySelectorAll('input[name="layer"]').forEach((input) => {
 
     input.addEventListener('change', (event) => {
       currentLayer = event.target.value;
+
+      console.log("Radio selected:", currentLayer);
+
       updateLayer();
     });
   })
