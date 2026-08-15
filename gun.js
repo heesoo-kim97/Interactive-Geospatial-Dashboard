@@ -81,7 +81,7 @@ const createDeck = () => {
   deckgl = new deck.DeckGL({
       container: 'map-container',
       // Set your Mapbox access token here
-      mapboxApiAccessToken: 'REMOVED_MAPBOX_TOKEN',
+      mapboxApiAccessToken: MAPBOX_TOKEN,
 
       mapStyle: 'mapbox://styles/mapbox/dark-v10',
 
