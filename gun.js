@@ -11,10 +11,18 @@ const tooltip = document.getElementById("tooltip");
 
     $(function() {
       $('input[name="daterange"]').daterangepicker({
-        opens: 'left'
-      }, function(start, end, label) {
-        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        opens: 'left',
+        startDate: '01/01/2013',
+        endDate: '12/31/2018',
+        locale: {
+          format: 'MM/DD/YYYY'
+        }
+      }, function(start, end) {
+        console.log("Date selected: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        filterByDate(start, end);
       });
+
+
     });
 
     fetch('./gunData.json')
@@ -30,6 +38,20 @@ const tooltip = document.getElementById("tooltip");
     .catch(error => {
       console.log('Error:', error)
     });
+
+const filterByDate = (startDate, endDate) => {
+        filteredData = gunData.filter(d => {
+          const incidentDate = moment(d.date,
+            ['M/D/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD'], true);
+
+          return incidentDate.isSameOrAfter(startDate, 'day') &&
+                 incidentDate.isSameOrBefore(endDate, 'day');
+        });
+
+        console.log("Filtered data:", filteredData.length); 
+        updateDashboard();
+        updateLayer();
+}
 
 const showToolTip = (object, x, y) => {
       console.log( object);
@@ -142,8 +164,8 @@ const createDeck = () => {
       Number(d.n_injured || 0) * 0.25,
 
 
-      radius: 1000,
-      elevationScale: 100,
+      radius: 800,
+      elevationScale: 500,
       extruded: true,
       coverage: 0.85,
       opacity: 0.7,
