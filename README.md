@@ -2,7 +2,7 @@
 
 An interactive web dashboard for exploring geographic patterns in U.S. gun violence incidents.
 
-![Dashboard Demo](assets/dashboard-demo.gif)
+<img width="900" height="623" alt="dashboard-demo" src="https://github.com/user-attachments/assets/4668672e-b600-4cdf-aba9-60471f1cf29f" />
 
 ---
 
@@ -73,7 +73,7 @@ Each record represents an individual incident and includes information such as:
 - Location
 - Incident categories
 
-The data was retreived from Kaggle and here is the [link](https://www.kaggle.com/datasets/jameslko/gun-violence-data/data?select=gun-violence-data_01-2013_03-2018.csv)
+The data was retreived from Kaggle and here is the [link](https://www.kaggle.com/datasets/jameslko/gun-violence-data/data?select=gun-violence-data_01-2013_03-2018.csv).
 
 ---
 
