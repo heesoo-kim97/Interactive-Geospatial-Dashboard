@@ -81,7 +81,7 @@ The data was retreived from Kaggle and here is the [link](https://www.kaggle.com
 
 ### 🎥 Video Demo
 
-[▶️ Watch the Interactive Dashboard Demo](video/geospatial_map_demo.mp4)
+[![Watch the 54-second demo](assets/demo-thumbnail.png)](https://www.youtube.com/watch?v=E6m55ILnQLg)
 
 The demo shows the dashboard's main features, including date filtering, incident mapping, density visualization, and 3D density visualization.
 
@@ -98,3 +98,5 @@ Interactive-Geospatial-Dashboard/
 ├── styles.css
 ├── config.js
 └── README.md
+
+
