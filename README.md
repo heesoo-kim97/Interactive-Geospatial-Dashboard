@@ -6,7 +6,7 @@ An interactive web dashboard for exploring geographic patterns in U.S. gun viole
 
 ---
 
-## 📌 Table of Contents
+## ⏬ Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
@@ -30,12 +30,12 @@ The dashboard allows users to filter incidents by date and switch between multip
 
 | Feature | Description |
 |---|---|
-| 🗺️ Interactive Map | Explore incidents across the United States |
-| 📅 Date Range | Filter incidents by date |
-| 📍 Incidents | View individual incident locations |
-| 🔥 Density | Identify areas with higher incident concentration |
-| 📊 3D Density | Explore geographic density in 3D |
-| 📈 Summary Metrics | View total incidents, killed, and injured |
+|  Interactive Map | Explore incidents across the United States |
+|  Date Range | Filter incidents by date |
+|  Incidents | View individual incident locations |
+|  Density | Identify areas with higher incident concentration |
+|  3D Density | Explore geographic density in 3D |
+|  Summary Metrics | View total incidents, killed, and injured |
 
 ---
 
@@ -178,7 +178,7 @@ The filtered data is also used to dynamically calculate total incidents, deaths,
 
 ---
 
-## 👩‍💻 Author
+## Author
 
 **Heesoo Kim**  
 - Data Analytics | Business Intelligence | Software Development
