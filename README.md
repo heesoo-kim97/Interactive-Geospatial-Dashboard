@@ -73,7 +73,7 @@ Each record represents an individual incident and includes information such as:
 - Location
 - Incident categories
 
-The data was retreived from Kaggle and here is the [link](https://www.kaggle.com/datasets/jameslko/gun-violence-data/data?select=gun-violence-data_01-2013_03-2018.csv).
+The data was retrieved from Kaggle and here is the [link](https://www.kaggle.com/datasets/jameslko/gun-violence-data/data?select=gun-violence-data_01-2013_03-2018.csv).
 
 ---
 
@@ -81,7 +81,9 @@ The data was retreived from Kaggle and here is the [link](https://www.kaggle.com
 
 ### 🎥 Video Demo
 
-[![Watch the 54-second demo](assets/demo-thumbnail.png)](https://www.youtube.com/watch?v=E6m55ILnQLg)
+[![Watch the 54-second demo](photo/cover_gv.png)](https://www.youtube.com/watch?v=E6m55ILnQLg)
+
+**▶️ Click the map above to watch the interactive dashboard demo**
 
 The demo shows the dashboard's main features, including date filtering, incident mapping, density visualization, and 3D density visualization.
 
@@ -97,6 +99,29 @@ Interactive-Geospatial-Dashboard/
 ├── gunData.json
 ├── styles.css
 ├── config.js
+├── photo/
+│   └── cover_gv.png
 └── README.md
+
+```
+---
+
+## How It Works
+
+The dashboard follows a simple data-to-visualization workflow:
+
+```text
+gunData.json
+     ↓
+Load & Parse Data
+     ↓
+Date Range Filter
+     ↓
+Update Dashboard Metrics
+     ↓
+Update Visualization Layer
+     ↓
+Scatterplot / Density / 3D Density
+```
 
 
