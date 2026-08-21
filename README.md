@@ -14,7 +14,8 @@ An interactive web dashboard for exploring geographic patterns in U.S. gun viole
 - [Data](#data)
 - [Demo](#demo)
 - [Project Structure](#project-structure)
-- [Key Takeaways](#key-takeaways)
+- [How It Works](#how-it-works)
+- [Author](#author)
 
 ---
 
@@ -123,5 +124,63 @@ Update Visualization Layer
      ↓
 Scatterplot / Density / 3D Density
 ```
+---
 
+### 1. Load the Data
+
+**Concept:**  
+The incident data is loaded from a JSON file and stored in JavaScript arrays.
+
+<details>
+<summary>View JavaScript Code</summary>
+<img width="700" height="249" alt="Screenshot 2026-08-21 at 5 08 50 AM" src="https://github.com/user-attachments/assets/f1eb0e09-deb8-4ab1-937b-3d4e508b9153" />
+
+</details>
+
+---
+
+### 2. Filter By Date
+
+**Concept:**  
+When a user selects a date range, the incident data is filtered before the dashboard is updated.
+
+<details>
+<summary>View JavaScript Code</summary>
+<img width="700" height="250" alt="Screenshot 2026-08-21 at 5 10 08 AM" src="https://github.com/user-attachments/assets/32f61ffe-0cfb-4a7a-a48f-4e04fb41e6c9" />
+
+</details>
+
+---
+
+### 3. Load the Data
+
+**Concept:**  
+The dashboard dynamically switches between three deck.gl layers based on the selected visualization.
+
+<details>
+<summary>View JavaScript Code</summary>
+<img width="700" height="340" alt="Screenshot 2026-08-21 at 5 11 13 AM" src="https://github.com/user-attachments/assets/08bc040f-302a-41cf-9d28-d1a84f893503" />
+
+
+</details>
+
+---
+
+### 4. Calculate Dashboard Metrics
+
+**Concept:**  
+The filtered data is also used to dynamically calculate total incidents, deaths, and injuries.
+
+<details>
+<summary>View JavaScript Code</summary>
+<img width="644" height="144" alt="Screenshot 2026-08-21 at 5 12 47 AM" src="https://github.com/user-attachments/assets/43e8c864-8ce3-4e25-aa6c-7a3b23d306f2" />
+
+</details>
+
+---
+
+## 👩‍💻 Author
+
+**Heesoo Kim**  
+Data Analytics | Business Intelligence | Software Development
 
