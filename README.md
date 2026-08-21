@@ -2,7 +2,7 @@
 
 An interactive web dashboard for exploring geographic patterns in U.S. gun violence incidents.
 
-<img width="560" height="384" alt="Interactive-Geospatial-Dashboard-demo-smaller" src="https://github.com/user-attachments/assets/a5f46a88-617c-4b9b-aa90-c89c6f0945cf" />
+<img width="820" height="424" alt="Interactive-Geospatial-Dashboard-demo-smaller" src="https://github.com/user-attachments/assets/a5f46a88-617c-4b9b-aa90-c89c6f0945cf" />
 
 ---
 
