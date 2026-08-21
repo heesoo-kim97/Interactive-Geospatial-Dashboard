@@ -15,7 +15,6 @@ An interactive web dashboard for exploring geographic patterns in U.S. gun viole
 - [Demo](#demo)
 - [Project Structure](#project-structure)
 - [How It Works](#how-it-works)
-- [Author](#author)
 
 ---
 
@@ -182,5 +181,5 @@ The filtered data is also used to dynamically calculate total incidents, deaths,
 ## 👩‍💻 Author
 
 **Heesoo Kim**  
-Data Analytics | Business Intelligence | Software Development
+- Data Analytics | Business Intelligence | Software Development
 
